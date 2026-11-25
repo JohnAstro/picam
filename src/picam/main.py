@@ -30,6 +30,8 @@ class StreamingOutput(io.BufferedIOBase):
             self.frame = buf
             self.condition.notify_all()
 
+output = StreamingOutput()
+
 class StreamingHandler(server.BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/":
@@ -90,7 +92,6 @@ def main() -> None:
     camera = Picamera2()
     camera_config = camera.create_preview_configuration(main={"size": (640, 480)})
     camera.configure(camera_config)
-    output = StreamingOutput()
     camera.start_recording(MJPEGEncoder(), FileOutput(output))
 
     try:
